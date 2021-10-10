@@ -33,7 +33,7 @@ class CarModel(models.Model):
     Type =models.CharField(max_length=30,choices=CHOICES)
     Year=models.DateField(null=True)
     def __str__(self):
-        return "Car Make: " + self.carMake 
+        return "Car name: " + self.name  
 
 class DealerReview:
     def __init__(self,dealership,name,purchase,review,purchase_date,car_make,car_model,car_year,sentiment,id):
@@ -49,6 +49,8 @@ class DealerReview:
         self.id=id
     def __str__(self):
         return "name: " + self.name
+
+
 # <HINT> Create a plain Python class to hold review data
 class CarDealer:
 

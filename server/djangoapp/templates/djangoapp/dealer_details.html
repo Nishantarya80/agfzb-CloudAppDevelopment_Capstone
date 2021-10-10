@@ -23,7 +23,10 @@
                 {% if user.is_authenticated %}
                 <li>
                     <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'djangoapp:add_review' dealer_id %}">Add a review of this company</a>
+                        <a href="{% url 'djangoapp:logout' %}">Log Out</a>
+                    </div>
                 </li>
                 {% else %}
                 <li>
@@ -44,41 +47,19 @@
     </nav>
 
     <!-- Page content -->
-    <!--table-->
-    <br>
+
     <div class="container">
-        <table  class="table" id="table" data-filter-control="true">
-            <thead class="thead-dark">
-              <tr>
-                <th  >ID</th>
-                <th  >Dealer Name</th>
-                <th  >City</th>
-                <th >Address</th>
-                <th >Zip</th>
-                <th data-field="state" data-filter-control="select">State</th>
-              </tr>
-              </thead>
-
-        <tbody>
-        {% for dealer in dealership_list %}
-          <tr>
-            <td>{{dealer.id}}</td>
-            <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
-            <td>{{dealer.city}}</td>
-            <td>{{dealer.address}}</td>
-            <td>{{dealer.zip}}</td>
-            <td>{{dealer.st}}</td>
-          </tr>
-
-        {% endfor %}
-        </tbody>
-      </table>
-      
+        <div class="card-columns">
+            {% for view in review_list %}    
+            
+                <div class="card">
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/{{view.sentiment}}.png" width="15%" height="15%">
+                    <div class="card-body">
+                        <h3 class="card-title">{{view.name}}</h3>
+                        <h5 class="card-title">{{view.purchase_date}}</h5>
+                        <p class="card-text">{{view.review}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-    </body>
-    <script>
-        $(function() {
-          $('#table').bootstrapTable()
-        })
-      </script>
-</html>

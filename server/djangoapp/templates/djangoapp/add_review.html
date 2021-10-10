@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <title>Dealership Review</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-md navbar-dark  bg-dark"><!--fixed-top-->
+        <div class="container-fluid">
+            <div class="navbar-header">
+                  <a class="navbar-brand" href="{% url 'djangoapp:index' %}"><img src="https://img.icons8.com/fluency/48/000000/car-rental.png" width="18%" height="18%" class="d-inline-block align-top" alt="">Car Dealership</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li>
+                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" name="username" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
+                        </div>
+                            <button class="btn btn-dark" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                        
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <form action="{% url 'djangoapp:add_review' dealer.id %}" method="POST">
+            {% csrf_token %}
+            <h1> Add a Review about
+                <b>{{ dealer.full_name }}</b></h1>
+
+
+
+            <div class="form-group">
+                <label for="review_content">
+                    <h5>
+                        <b>
+                            Enter the review content:
+                        </b>
+                    </h5>
+                </label>
+                <textarea class="form-control" id="review_content" name="review_content" rows="2" required></textarea>
+                <div class = "container-fluid" style = "margin-top: 2em">
+                    <span>
+                        <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+                    </span>
+
+                    <span>
+                        Has purchased the car 
+                        from {{dealer.full_name}} ?
+                    </span>
+
+                </div>
+                <div style="margin-top: 2em; margin-bottom: 2em">
+                    <span>
+
+                        <b>
+                            Select your car (model-make-year):
+                        </b>
+
+                    </span>
+
+                    <span>
+                        
+                        {% for car in cars %}
+
+                        {% endfor %}
+                        <select name="car_details" id="car_details" class="form-select" required>
+                            {% for car in cars %}
+                            
+                            <option selected value="{{car.name}}-{{car.make.name}}-{{ car.year }}">
+                                {{car.name}}-{{car.make.name}}-{{ car.year }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </span>
+                </div>
+                <label for="purchase_date">
+                    <h5>
+                        <b>
+                            Select Your Purchase Date:
+                        </b>
+                    </h5>
+                </label>
+
+
+                <input class="datepicker" data-date-format="mm/dd/yyyy" name="purchase_date" id="purchase_date">
+               
+                
+                <input type="text" value = "{{dealer.id}}" id = "dealership"
+                name = "dealership" class="form-control" required hidden>
+                <button class="btn btn-primary" type="submit" style="margin-top: 2em;">
+                    Submit
+                </button>
+            </div>
+
+            <!--Add review form here -->
+
+        </form>
+    </div>
+</body>
+
+<script type="text/javascript">
+    $('.datepicker').datepicker({
+        format: 'mm/dd/yyyy'
+    });
+</script>
+
+</html>

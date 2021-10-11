@@ -19,7 +19,6 @@ def get_request(url, **kwargs):
             response = requests.get(url, headers={'Content-Type':'application/json'}, params=params, auth=HTTPBasicAuth('apikey', api_key))
         else:
             response = requests.get(url, headers={'Content-Type':'application/json'}, params=kwargs)
-            print("error here"+str(url))
         status_code = response.status_code
         if status_code == 200:
             json_data = json.loads(response.text)
@@ -40,7 +39,6 @@ def post_request(url, json_payload, **kwargs):
         status_code = response.status_code
         if status_code == 200:
             json_data = json.loads(response.text)
-            print(response.text)
             return json_data
         else:
             print('Response Status Code = ', status_code)
@@ -77,14 +75,21 @@ def get_dealer_reviews_from_cf(url):
     if json_result:
         reviews = json_result["review"]
         for review in reviews:
+            try:
+                Sentiment=analyze_review_sentiments(review["review"])
+  
+            except:
+                Sentiment="neutral"
+     
+
             if review["purchase"]==True:
                 review_obj = DealerReview(id=review["id"],dealership=review["dealership"],name=review["name"],purchase=review["purchase"],
                 review=review["review"],purchase_date=review["purchase_date"],car_make=review["car_make"],car_model=review["car_model"],
-                car_year=review["car_year"], sentiment=analyze_review_sentiments(review["review"]))
+                car_year=review["car_year"], sentiment=Sentiment)
             else:
                 review_obj = DealerReview(id=review["id"],dealership=review["dealership"],name=review["name"],purchase=review["purchase"],
                 review=review["review"],purchase_date=review["review_time"],car_make="NONE",car_model="NONE",
-                car_year="NONE", sentiment=analyze_review_sentiments(review["review"]))
+                car_year="NONE", sentiment=Sentiment)
             results.append(review_obj)
     return results
 

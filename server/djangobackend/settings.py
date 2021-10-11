@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'ao5z(o(z@cvzodm99d32jkxa5e8a1!q_4sqss5-a%n6tg$#h$+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['dealership80.eu-gb.mybluemix.net','127.0.0.1','localhost']
 
@@ -119,7 +119,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
+
+MEDIA_ROOT = os.path.join(os.path.join(BASE_DIR, 'static'), 'media')
 MEDIA_URL = '/media/'

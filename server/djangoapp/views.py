@@ -97,8 +97,11 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     context={}
     if request.method == "GET":
-            url = "https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/review"
-            url_dealer = "https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/dealership"
+            # LOCAL url = "https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/review"
+            # LOCAL url_dealer = "https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/dealership"
+            url = "https://1da01ea5.eu-gb.apigw.appdomain.cloud/api/review"
+            url_dealer = "https://1da01ea5.eu-gb.apigw.appdomain.cloud/api/dealership"
+
             # Get dealers from the URL
             dealerships = get_dealer_reviews_from_cf(str(url)+'?dealerId='+str(dealer_id))
             dealer_name = get_dealers_from_cf(url_dealer)
@@ -117,13 +120,15 @@ def add_review(request, dealer_id):
     context = {}
     print("thanks"+str(dealer_id))
     if request.method == 'GET':
-        url = 'https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/dealership'
+        # LOCAL url = 'https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/dealership'
+        url = "https://1da01ea5.eu-gb.apigw.appdomain.cloud/api/dealership"
         dealerships = get_dealers_from_cf(url, **({'id':dealer_id}))
         context['dealer'] = dealerships[dealer_id-1]
         context['cars'] = CarModel.objects.filter(dealerid=dealer_id)
         return render(request, 'djangoapp/add_review.html', context)
     elif request.method == 'POST':
-        url = 'https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/review'
+        # LOCAL url = 'https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/7eed226c81af75dae086a851aa8986b232fbb65a5f0a0483731fc5046f29267e/api/review'
+        url = "https://1da01ea5.eu-gb.apigw.appdomain.cloud/api/review"
         dealer_reviews = get_dealer_reviews_from_cf(url)
         max_id = max([review.id for review in dealer_reviews], default=100)
         new_id = max_id + 1 if max_id >= 100 else max_id + 100
